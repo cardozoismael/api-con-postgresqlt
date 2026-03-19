@@ -1,27 +1,26 @@
+const morgan = require("morgan");
 const express = require("express");
-const app = express();
-const PORT = 3000;
 const helmet =require("helmet");
 
+const app = express();
 app.use(express.json())
-app.use(
-    helmet.contentSecurityPolicy({
-        directives:{
-            defaultsrc:["'self'"],
-            connectsrc:["'self'","http:localhost:3000"],
-        },
-    })
-)
+app.use(helmet())
+app.use(morgan("dev"))
+
+
 //usuarios
-const usuariosRutas =require("./rutas/usuarios")
+const usuariosRutas =require("./ruters/usuarios")
 app.use("/usuario",usuariosRutas);
 
 //posts
-const postsRutas =require("./rutas/posts") 
+const postsRutas =require("./ruters/posts") 
 app.use("/posts",postsRutas)
 
-//delete
-const comentarioRutas = require("./rutas/comentario");
+//comentariosDeLosPostsRutas
+const comentarioRutas = require("./ruters/comentario");
 app.use("/comentarios",comentarioRutas)
+
+
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT,()=>{console.log(`servidor escuchando en el puerto ${PORT}`)})
